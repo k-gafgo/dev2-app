@@ -30,4 +30,4 @@ jobs:
           python -m pip install -e .[lint]
 
       - name: Lint code # we dont need a pip, bc only 1 command/line
-        run: ruff check --output=github .
+        run: ruff check --output-format=github .
