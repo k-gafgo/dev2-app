@@ -1,0 +1,33 @@
+name: Python Lint and Test (L+T)
+
+run-name: L+T, triggered by ${{ github.actor }}
+
+on: 
+  push: 
+    branches: 
+      - main
+  pull_request: 
+    branches: 
+      - main
+
+jobs: 
+  lint: 
+    runs-on: ubuntu-latest
+    steps: # each - is a new list -> new step
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0 # just include the latest commit
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with: 
+          python-version: '3.13'
+
+      - name: Install dependencies # runs commands inside the shell of the vm, have a look at pyproject.toml; 1st cmd installs all dependencies for the app, 2nd the dependencies marked with lint 
+        run: | 
+          python -m pip install -e .
+          python -m pip install -e .[lint]
+
+      - name: Lint code # we dont need a pip, bc only 1 command/line
+        run: ruff check --output=github .
