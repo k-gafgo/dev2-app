@@ -4,15 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from dev2il_devops_app import setup_otel
+from dev2il_devops_app.otel import setup_otel
 
 app = FastAPI(titel="dev2il-devops-app")
 data_file_path = 'data.csv'
 image_file_path = 'image.png'
 
-
 setup_otel(app)
-
 
 @app.get('/')
 def get_root():
