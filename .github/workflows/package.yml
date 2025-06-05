@@ -1,7 +1,7 @@
 name: Packaging
 
 run-name: Packaging, triggered by ${{ github.actor }} 📦
-
+# only triggered, when we have used the following tag
 on:
   push:
     tags:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+      packages: write # able to create docker images (= github packages)
       attestations: write
       id-token: write
     steps:
@@ -36,7 +36,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build and push image
+      - name: Build and push image # we push our new image to registry
         id: push
         uses: docker/build-push-action@v6
         with:
@@ -45,7 +45,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Generate artifact attestation
+      - name: Generate artifact attestation # ignore this, just for security reasons
         uses: actions/attest-build-provenance@v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
